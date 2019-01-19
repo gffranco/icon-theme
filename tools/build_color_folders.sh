@@ -30,7 +30,7 @@
 
 set -eo pipefail
 
-SCRIPT_DIR="$(dirname "$0")"
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 TARGET_DIR="$SCRIPT_DIR/../Papirus"
 
 DEFAULT_COLOR="blue"
@@ -57,6 +57,11 @@ COLORS=(
 	[grey]="    #8e8e8e #727272 #323232 #e4e4e4"
 	[magenta]=" #ca71df #b259b8 #47274e #e4e4e4"
 	[orange]="  #ee923a #dd772f #533314 #e4e4e4"
+<<<<<<< HEAD
+=======
+	[pink]="    #f06292 #ec407a #542233 #e4e4e4"
+	[purple]="  #7f39fb #632cc2 #2c1458 #e4e4e4"
+>>>>>>> upstream/master
 	[red]="     #e25252 #bf4b4b #4f1d1d #e4e4e4"
 	[teal]="    #16a085 #12806a #08382e #e4e4e4"
 	[violet]="  #a674de #8b58c5 #3a284d #e4e4e4"
@@ -65,19 +70,27 @@ COLORS=(
 )
 
 
+<<<<<<< HEAD
 msg() {
 	printf "%b => %b%s\n" "\e[1;32m" "\e[0m" "$*" >&2
 	# printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
 }
 
 warn() {
+=======
+headline() {
+	printf "%b => %b%s\n" "\e[1;32m" "\e[0m" "$*" >&2
+}
+
+msg() {
+>>>>>>> upstream/master
 	printf "%b [+] %b%s\n" "\e[1;33m" "\e[0m" "$*" >&2
 }
 
 recolor() {
 	# args: <old colors> <new colors> <path to file>
-	declare -a old_colors=( $1 )
-	declare -a new_colors=( $2 )
+	IFS=" " read -ra old_colors <<< "$1"
+	IFS=" " read -ra new_colors <<< "$2"
 	local filepath="$3"
 
 	[ -f "$filepath" ] || exit 1
@@ -87,8 +100,12 @@ recolor() {
 	done
 }
 
+<<<<<<< HEAD
 
 msg "PHASE 1: Delete color suffix from monochrome icons ..."
+=======
+headline "PHASE 1: Delete color suffix from monochrome icons ..."
+>>>>>>> upstream/master
 # -----------------------------------------------------------------------------
 find "$TARGET_DIR" -regextype posix-extended \
 	-regex ".*/16x16/places/${FILES_REGEX}${DEFAULT_COLOR}-.*" \
@@ -96,12 +113,20 @@ find "$TARGET_DIR" -regextype posix-extended \
 
 	new_file="${file/-$DEFAULT_COLOR-/-}"
 
+<<<<<<< HEAD
 	warn "'$file' is renamed to '$new_file'"
+=======
+	msg "'$file' is renamed to '$new_file'"
+>>>>>>> upstream/master
 	mv -f "$file" "$new_file"
 done
 
 
+<<<<<<< HEAD
 msg "PHASE 2: Create missing symlinks ..."
+=======
+headline "PHASE 2: Create missing symlinks ..."
+>>>>>>> upstream/master
 # -----------------------------------------------------------------------------
 find "$TARGET_DIR" -type f -regextype posix-extended \
 	-regex ".*/${COLOR_SIZES_REGEX}/places/${FILES_REGEX}${DEFAULT_COLOR}[-\.].*" \
@@ -112,12 +137,20 @@ find "$TARGET_DIR" -type f -regextype posix-extended \
 
 	[ -e "$symlink" ] && continue
 
+<<<<<<< HEAD
 	warn "Creating missing symlink '$symlink' ..."
+=======
+	msg "Creating missing symlink '$symlink' ..."
+>>>>>>> upstream/master
 	ln -sf "$target" "$symlink"
 done
 
 
+<<<<<<< HEAD
 msg "PHASE 3: Generate color folders ..."
+=======
+headline "PHASE 3: Generate color folders ..."
+>>>>>>> upstream/master
 # -----------------------------------------------------------------------------
 find "$TARGET_DIR" -type f -regextype posix-extended \
 	-regex ".*/${SIZES_REGEX}/places/${FILES_REGEX}${DEFAULT_COLOR}[-\.].*" \
@@ -134,7 +167,11 @@ find "$TARGET_DIR" -type f -regextype posix-extended \
 done
 
 
+<<<<<<< HEAD
 msg "PHASE 4: Create symlinks for Folder Color v0.0.80 and newer ..."
+=======
+headline "PHASE 4: Create symlinks for Folder Color v0.0.80 and newer ..."
+>>>>>>> upstream/master
 # -----------------------------------------------------------------------------
 # Icons mapping
 FOLDER_COLOR_MAP=(
@@ -148,7 +185,7 @@ FOLDER_COLOR_MAP=(
 
 for mask in "${FOLDER_COLOR_MAP[@]}"; do
 	for color in "${!COLORS[@]}"; do
-		icon_mask=( $mask )
+		IFS=" " read -ra icon_mask <<< "$mask"
 		folder_color_icon="${icon_mask[0]/COLOR/$color}"
 		icon="${icon_mask[1]/COLOR/$color}"
 
@@ -165,16 +202,24 @@ for mask in "${FOLDER_COLOR_MAP[@]}"; do
 done
 
 
+<<<<<<< HEAD
 msg "PHASE 5: Copy color folder icons to derivative themes ..."
+=======
+headline "PHASE 5: Copy color folder icons to derivative themes ..."
+>>>>>>> upstream/master
 # -----------------------------------------------------------------------------
 COLOR_NAMES="${!COLORS[*]}"  # get a string of colors
 COLOR_REGEX="(${COLOR_NAMES// /|})"  # convert the list of colors to regex
 DERIVATIVES=(
 	ePapirus
+<<<<<<< HEAD
 	Papirus-Adapta
 	Papirus-Adapta-Nokto
 	Papirus-Dark
 	Papirus-Light
+=======
+	Papirus-Dark
+>>>>>>> upstream/master
 )  # array of derivative icon themes with 16x16 places
 
 find "$TARGET_DIR" -regextype posix-extended \
@@ -185,6 +230,7 @@ find "$TARGET_DIR" -regextype posix-extended \
 		cp -P --remove-destination "$file" "${file/Papirus/$d}"
 	done
 done
+<<<<<<< HEAD
 
 
 msg "PHASE 6: Copy places icons to Pairus-Adapta ..."
@@ -209,3 +255,5 @@ find "$TARGET_DIR/../Papirus-Adapta" -type f -regextype posix-extended \
 	# warn "Creating missing symlink '$symlink' ..."
 	ln -sf "$target" "$symlink"
 done
+=======
+>>>>>>> upstream/master

@@ -4,7 +4,7 @@
 
 set -eo pipefail
 
-readonly SCRIPT_DIR="$(dirname "$0")"
+readonly SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 readonly TARGET_DIR="$SCRIPT_DIR/Papirus"
 
 usage() {
@@ -18,7 +18,8 @@ usage() {
 	    [ac]tions
 	    [ap]ps
 	    [d]evices
-	    [e]mblems
+	    [emb]lems
+	    [emo]tes
 	    [m]imetypes
 	    [pa]nel
 	    [pl]aces
@@ -67,8 +68,12 @@ _get_context() {
 			CONTEXT="devices"
 			SIZES=( '16x16' '22x22' '24x24' '32x32' '48x48' '64x64' )
 			;;
-		emblems|e*)
+		emblems|emb*)
 			CONTEXT="emblems"
+			SIZES=( '16x16' '22x22' '24x24' '32x32' '48x48' )
+			;;
+		emotes|emo*)
+			CONTEXT="emotes"
 			SIZES=( '16x16' '22x22' '24x24' '32x32' '48x48' )
 			;;
 		mimetypes|m*)

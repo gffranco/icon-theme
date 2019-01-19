@@ -4,15 +4,16 @@
 
 set -eo pipefail
 
-readonly SCRIPT_DIR="$(dirname "$0")"
-readonly ROOT_DIR="$SCRIPT_DIR/../.."
+readonly SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+readonly SOURCE_DIR="$SCRIPT_DIR/../.."
 
 case "$1" in
 	all)          CONTEXT_DIR="/"           ;;
 	actions|ac*)  CONTEXT_DIR="/actions/"   ;;
 	apps|ap*)     CONTEXT_DIR="/apps/"      ;;
 	devices|d*)   CONTEXT_DIR="/devices/"   ;;
-	emblems|e*)   CONTEXT_DIR="/emblems/"   ;;
+	emblems|emb*) CONTEXT_DIR="/emblems/"   ;;
+	emotes|emo*)  CONTEXT_DIR="/emotes/"    ;;
 	mimetypes|m*) CONTEXT_DIR="/mimetypes/" ;;
 	panel|pa*)    CONTEXT_DIR="/panel/"     ;;
 	places|pl*)   CONTEXT_DIR="/places/"    ;;
@@ -29,7 +30,8 @@ case "$1" in
 		    [ac]tions
 		    [ap]ps
 		    [d]evices
-		    [e]mblems
+		    [emb]lems
+		    [emo]tes
 		    [m]imetypes
 		    [pa]nel
 		    [pl]aces
@@ -45,7 +47,7 @@ case "$1" in
 		;;
 esac
 
-find "$ROOT_DIR/Papirus" -type f -name '*.svg' | grep "$CONTEXT_DIR" | \
+find "$SOURCE_DIR/Papirus" -type f -name '*.svg' | grep "$CONTEXT_DIR" | \
 	grep -i "${2:?PATTERN not set!}" | while read -r file; do
 
 	src_dir=$(dirname "$file")
